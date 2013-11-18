@@ -40,6 +40,10 @@ module TicTacToe
     @board
   end
 
+  def usuario
+    session["usuario"]
+  end
+
   def board
     session["bs"]
   end
