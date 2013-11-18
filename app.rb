@@ -1,22 +1,19 @@
 require 'sinatra'
 require 'sass'
 require 'pp'
-require 'haml'
-require './usuarios.rb'
 
 settings.port = ENV['PORT'] || 4567
-
+#enable :sessions
 use Rack::Session::Pool, :expire_after => 2592000
+#set :session_secret, 'super secret'
 
+#configure :development, :test do
+#  set :sessions, :domain => 'example.com'
+#end
 
-configure :development do
-  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/development.db")
-end
-
-configure :production do
-  DataMapper.setup(:default, ENV['DATABASE_URL'])
-end
-DataMapper.auto_upgrade!
+#configure :production do
+#  set :sessions, :domain => 'herokuapp.com'
+#end
 
 module TicTacToe
   HUMAN = CIRCLE = "circle" # human
@@ -39,10 +36,6 @@ module TicTacToe
       @board[k] = BLANK
     end
     @board
-  end
-
-  def usuario
-    session["usuario"]
   end
 
   def board
@@ -132,16 +125,10 @@ module TicTacToe
   def computer_wins?
     winner == COMPUTER
   end
-
-  def tie?
-      ((winner != COMPUTER) && (winner != HUMAN))
-  end
 end
 
 helpers TicTacToe
-#########################################################################################
-# Para cada una de las jugadas dependiendo de donde pulsemos de ahi el expresion regular.
-#########################################################################################
+
 get %r{^/([abc][123])?$} do |human|
   if human then
     puts "You played: #{human}!"
@@ -152,7 +139,7 @@ get %r{^/([abc][123])?$} do |human|
       # computer = board.legal_moves.sample
       computer = smart_move
       redirect to ('/humanwins') if human_wins?
-      redirect to('/tie') unless computer
+      redirect to('/') unless computer
       board[computer] = TicTacToe::CROSS
       puts "I played: #{computer}!"
       puts "Tablero:  #{board.inspect}"
@@ -165,25 +152,14 @@ get %r{^/([abc][123])?$} do |human|
   end
   haml :game, :locals => { :b => board, :m => ''  }
 end
-###########################################
-# La llamada que se produce cuando ganamos.
-###########################################
+
 get '/humanwins' do
   puts "/humanwins session="
   pp session
   begin
     m = if human_wins? then
           'Human wins'
-          if (session["usuario"] != nil)
-            un_usuario = Usuario.first(:username => session["usuario"])
-            un_usuario.partidas_ganadas = un_usuario.partidas_ganadas + 1
-            un_usuario.partidas_jugadas = un_usuario.partidas_jugadas + 1
-            un_usuario.save
-            pp un_usuario
-            p "---------"
-          end
         else 
-          p "gana el humano"
           redirect '/'
         end
     haml :final, :locals => { :b => board, :m => m }
@@ -191,23 +167,14 @@ get '/humanwins' do
     redirect '/'
   end
 end
-###############################################
-# ESta es para cuando perdemos, la maquina gana
-###############################################
+
 get '/computerwins' do
   puts "/computerwins"
   pp session
   begin
     m = if computer_wins? then
           'Computer wins'
-          if (session["usuario"] != nil)
-            un_usuario = Usuario.first(:username => session["usuario"])
-            un_usuario.partidas_perdidas = un_usuario.partidas_perdidas + 1
-            un_usuario.partidas_jugadas = un_usuario.partidas_jugadas + 1
-            un_usuario.save
-          end
         else 
-          p "gana la maquina"
           redirect '/'
         end
     haml :final, :locals => { :b => board, :m => m }
@@ -215,64 +182,6 @@ get '/computerwins' do
     redirect '/'
   end
 end
-#################################################################################################################################
-#En la practica origianl no se contemplaba la posibilidad de empatar. Se muestra un mensaje y se incremento el contados asociado.
-#################################################################################################################################
-get '/tie' do
-  puts "/tie"
-  pp session
-  begin
-    m = if tie? then
-          'TIE'
-          if (session["usuario"] != nil)
-            un_usuario = Usuario.first(:username => session["usuario"])
-            un_usuario.partidas_jugadas = un_usuario.partidas_jugadas + 1
-            un_usuario.partidas_empatadas = un_usuario.partidas_empatadas + 1
-            un_usuario.save
-          end
-          
-        else
-          
-          redirect '/'
-        end
-    haml :final, :locals => { :b => board, :m => m }
-  rescue
-    p "empateee"
-    redirect '/'
-  end
-end
-###################################################
-# Una peticion post para cuando creamos un usuario.
-###################################################
-post '/' do
-  if params[:logout]
-    @usuario = nil
-    session["usuario"] = nil
-    session.clear
-  else
-    nick = params[:usuario]
-    nick = nick["username"]
-    u = Usuario.first(:username => "#{nick}" )
-    if u == nil
-      usuario = Usuario.create(params[:usuario])
-      usuario.save
-      Aux = params[:usuario]
-      pp params[:usuario]
-      @usuario = Aux["username"]
-      p "ATENCION"
-      pp @usuario
-      session["usuario"] = @usuario
-    else
-      p "Ya existe el usuario"
-      @usuario = nil
-      session["usuario"] = nil
-      session.clear
-    end
-  end
-    redirect '/'
-end
-
-
 
 not_found do
   puts "not found!!!!!!!!!!!"
