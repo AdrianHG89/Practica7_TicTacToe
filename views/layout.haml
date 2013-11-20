@@ -46,8 +46,11 @@
                                                 %button.btn{type: "submit", :value=>"Jugar!"} Jugar!
                                     -else
                                         %form.form-search.right{:action=>"/",:method=>"post"}
-                                            .input-append
-                                                %label.saludo Hola, #{usuario}
-                                                %input{:type=>"hidden",:value=>"1",:name=>"logout"}
-                                                %button.btn{:type=>"submit",:value=>"Salir"} Salir
+                                            %ul.nav.nav-pills.nav-stacked
+                                                %li
+                                                    %h4
+                                                        %a{href: "#"}
+                                                            Hola #{usuario}
+                                            %input{:type=>"hidden",:value=>"1",:name=>"logout"}
+                                            %button.btn{:type=>"submit",:value=>"Salir"} Salir
         = yield

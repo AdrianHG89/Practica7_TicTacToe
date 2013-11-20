@@ -159,7 +159,8 @@ get %r{^/([abc][123])?$} do |human|
     puts "session = "
     pp session
   end
-  haml :game, :locals => { :b => board, :m => ''  }
+  
+  haml :game, :locals => { :b => board, :m => '' }
 end
 ###########################################
 # La llamada que se produce cuando ganamos.
