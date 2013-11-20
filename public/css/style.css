@@ -32,10 +32,40 @@ body {
   background: url("/img/circle.gif") no-repeat;
   background-size: cover; }
 
-.base-font, .message {
-  color: #f9a7b0;
+.base-font, .ranking, .message {
+  color: darkred;
   font: 22px Helvetica, Arial, sans-serif; }
+
+.ranking {
+  color: black; }
 
 .message {
   display: inline;
   background-color: transparent; }
+
+#a1:hover {
+  background-color: lawngreen; }
+
+#a2:hover {
+  background-color: navy; }
+
+#a3:hover {
+  background-color: lawngreen; }
+
+#b1:hover {
+  background-color: navy; }
+
+#b2:hover {
+  background-color: lawngreen; }
+
+#b3:hover {
+  background-color: navy; }
+
+#c1:hover {
+  background-color: lawngreen; }
+
+#c2:hover {
+  background-color: navy; }
+
+#c3:hover {
+  background-color: lawngreen; }

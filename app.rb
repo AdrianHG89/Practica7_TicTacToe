@@ -131,6 +131,10 @@ module TicTacToe
   def computer_wins?
     winner == COMPUTER
   end
+
+  def tie?
+      ((winner != COMPUTER) && (winner != HUMAN))
+  end
 end
 
 helpers TicTacToe
@@ -148,7 +152,7 @@ get %r{^/([abc][123])?$} do |human|
       # computer = board.legal_moves.sample
       computer = smart_move
       redirect to ('/humanwins') if human_wins?
-      redirect to('/') unless computer
+      redirect to('/tie') unless computer
       board[computer] = TicTacToe::CROSS
       puts "I played: #{computer}!"
       puts "Tablero:  #{board.inspect}"
@@ -159,7 +163,8 @@ get %r{^/([abc][123])?$} do |human|
     puts "session = "
     pp session
   end
-  haml :game, :locals => { :b => board, :m => ''  }
+  
+  haml :game, :locals => { :b => board, :m => '' }
 end
 ###########################################
 # La llamada que se produce cuando ganamos.
@@ -177,7 +182,7 @@ get '/humanwins' do
             pp un_usuario
             p "---------"
           end
-          'Human wins'
+          'MUY BIEN, LE HAS GANADO A LA MAQUINA!!!'
         else 
           redirect '/'
         end
@@ -200,12 +205,39 @@ get '/computerwins' do
             un_usuario.partidas_jugadas = un_usuario.partidas_jugadas + 1
             un_usuario.save
           end
-          'Computer wins'
+          'PERDISTE. LA MAQUINA TE HA GANADO'
         else 
           redirect '/'
         end
     haml :final, :locals => { :b => board, :m => m }
   rescue
+    redirect '/'
+  end
+end
+
+#################################################################################################################################
+#En la practica origianl no se contemplaba la posibilidad de empatar. Se muestra un mensaje y se incremento el contados asociado.
+#################################################################################################################################
+get '/tie' do
+  puts "/tie"
+  pp session
+  begin
+    m = if tie? then          
+          if (session["usuario"] != nil)
+            un_usuario = Usuario.first(:username => session["usuario"])
+            un_usuario.partidas_jugadas = un_usuario.partidas_jugadas + 1
+            un_usuario.partidas_empatadas = un_usuario.partidas_empatadas + 1
+            un_usuario.save
+          end
+          'HAS EMPATADO CON LA MAQUINA'
+          
+        else
+          
+          redirect '/'
+        end
+    haml :final, :locals => { :b => board, :m => m }
+  rescue
+    p "empateee"
     redirect '/'
   end
 end
