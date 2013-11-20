@@ -1,20 +1,37 @@
 %center
-        %h1 RANKING
-        %table.table-hover
-                %thead
-                        %tr
-                                %th Nombre
-                                %th Partidas Jugadas
-                                %th Partidas Ganadas
-                                %th Partidas Perdidas
-                                %th Partidas Empatadas
-                %tbody
-                        - @usuarios.sort_by {|k, v| v}.reverse.each do |usuario|
+        .ranking
+                %h1 RANKING
+                %table.table-hover
+                        %thead
                                 %tr
-                                        %td.estilo1 #{usuario.username}
-                                        %td.estilo2 #{usuario.partidas_jugadas}
-                                        %td.estilo3 #{usuario.partidas_ganadas}
-                                        %td #{usuario.partidas_perdidas}
-                                        %td #{usuario.partidas_empatadas}
-                                %tr
-                                %tr
+                                        %th Nombre
+                                        %th
+                                        %th
+                                        %th Partidas Jugadas
+                                        %th
+                                        %th
+                                        %th Partidas Ganadas
+                                        %th
+                                        %th
+                                        %th Partidas Perdidas
+                                        %th
+                                        %th
+                                        %th Partidas Empatadas
+                        %tbody
+                                - @usuarios.sort_by {|k, v| v}.reverse.each do |usuario|
+                                        %tr
+                                                %td #{usuario.username}
+                                                %td
+                                                %td
+                                                %td #{usuario.partidas_jugadas}
+                                                %td
+                                                %td
+                                                %td #{usuario.partidas_ganadas}
+                                                %td
+                                                %td
+                                                %td #{usuario.partidas_perdidas}
+                                                %td
+                                                %td
+                                                %td #{usuario.partidas_empatadas}
+                                        %tr
+                                        %tr

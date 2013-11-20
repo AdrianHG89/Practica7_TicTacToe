@@ -32,9 +32,12 @@ body {
   background: url("/img/circle.gif") no-repeat;
   background-size: cover; }
 
-.base-font, .message {
+.base-font, .ranking, .message {
   color: darkred;
   font: 22px Helvetica, Arial, sans-serif; }
+
+.ranking {
+  color: black; }
 
 .message {
   display: inline;

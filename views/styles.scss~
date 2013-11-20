@@ -63,6 +63,7 @@ body       {
 
 .base-font { color: $msg; font: $message-font $main-font; }
 .ranking { @extend .base-font; color: $ran;}
+.ranking2 { text-align:center;}
 
 .message   { 
              @extend .base-font;
