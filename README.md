@@ -1,4 +1,4 @@
-![](http://i1296.photobucket.com/albums/ag1/adrihg89/Piedra_papel_tijeras_zpsf31ae8ab.jpg)
+![](http://banot.etsii.ull.es/alu3891/fotosstw/tictactoe.jpg)
 
 Práctica 7 - Tic Tac Toe:
 ===========
@@ -6,13 +6,14 @@ Práctica 7 - Tic Tac Toe:
 1. Objetivo
 -----------
 
-Partiendo del repositorio indicado en los apuntes, debemos 
+Partiendo del repositorio indicado en los apuntes, debemos añadirle una base de datos al juego TicTacToe de manera que se lleve la cuenta de los usuarios registrados, las partidas jugadas, ganadas, perdídas y empatadas con el fin de generar un ranking. Usando SASS deberán mostrarse las celdas pares e impares en distintos colores. Cuando la aplicación este funcionando en local la desplegamos en Heroku. 
 
 
 2. Instalación de las gemas
 --------------
 
-Instalaremos las gemas necesarias: bundle install.
+Instalaremos las gemas necesarias: bundle install o rake install
+
 3. Ejecución
 ------------
 
